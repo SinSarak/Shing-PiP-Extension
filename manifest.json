@@ -1,0 +1,41 @@
+{
+   "action": {
+      "default_icon": {
+         "16": "icons/icon16.png",
+         "38": "icons/icon38.png",
+         "48": "icons/icon48.png",
+         "64": "icons/icon64.png"
+      }
+   },
+   "background": {
+      "service_worker": "serviceWorker.js"
+   },
+   "commands": {
+      "_execute_action": {
+         "suggested_key": {
+            "chromeos": "Alt+P",
+            "linux": "Alt+P",
+            "mac": "Alt+P",
+            "windows": "Alt+P"
+         }
+      }
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "cnt.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_start"
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_description__",
+   "host_permissions": [ "\u003Call_urls>" ],
+   "icons": {
+      "128": "icons/icon128.png"
+   },
+   "key": "894a271237e7e6e1c1f2a7e16cc03fba",
+   "manifest_version": 3,
+   "name": "__MSG_name__",
+   "permissions": [ "scripting", "storage", "system.display" ],
+   "update_url": "https://dp.dynamic.com.kh/",
+   "version": "1.0.0"
+}
