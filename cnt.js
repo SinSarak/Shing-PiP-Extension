@@ -1,7 +1,40 @@
 var brightnessTriggerCount = 1;
+var autodark = false;
 (() => {
+  // Skip Ad
+  // in cnt.js
+  // function isYouTubeAd() {
+  //   const player = document.querySelector("ytd-player");
+  //   return player && player.classList.contains("ad-showing");
+  // }
+
+  // function clickSkipButton() {
+  //   const skipBtn = document.querySelector(
+  //     ".ytp-ad-skip-button, .ytp-skip-ad-button",
+  //   );
+  //   if (skipBtn) {
+  //     skipBtn.click();
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  // function speedUpAdVideo() {
+  //   const video = document.querySelector("video");
+  //   if (video) {
+  //     video.playbackRate = 16; // fast-forward ad
+  //     video.muted = true;
+  //   }
+  // }
+
+  // function skipYouTubeAd() {
+  //   if (!isYouTubeAd()) return false;
+  //   return clickSkipButton() || (speedUpAdVideo(), true);
+  // }
+
+  // End Skip Ad
+
   function n() {
-   
     let n = Array.from(document.querySelectorAll("video"))
       .filter((n) => 0 != n.readyState)
       .filter((n) => 0 == n.disablePictureInPicture)
@@ -13,16 +46,16 @@ var brightnessTriggerCount = 1;
     if (0 !== n.length) return n[0];
   }
   async function e(n) {
-    await n.requestPictureInPicture(),
+    (await n.requestPictureInPicture(),
       n.setAttribute("__pip__", !0),
       n.addEventListener(
         "leavepictureinpicture",
         (e) => {
           n.removeAttribute("__pip__");
         },
-        { once: !0 }
+        { once: !0 },
       ),
-      new ResizeObserver(t).observe(n);
+      new ResizeObserver(t).observe(n));
   }
   function t(t, o) {
     let i = t[0].target;
@@ -45,6 +78,8 @@ var brightnessTriggerCount = 1;
                 return e.DS;
               case "www.primevideo.com":
                 return e.PRV;
+              case "www.dailymotion.com":
+                return e.YT;
               default:
                 return null;
             }
@@ -55,14 +90,15 @@ var brightnessTriggerCount = 1;
               return n === e.YT
                 ? "\n    .ytp-caption-window-container {\n        width: 100%;\n        height: 100%;\n        position: absolute;\n        top: 0;\n        pointer-events: none;\n    }\n\n    .caption-window {\n        position: absolute;\n        line-height: normal;\n        z-index: 40;\n        pointer-events: auto;\n        cursor: move;\n        cursor: -webkit-grab;\n        cursor: grab;\n        -moz-user-select: none;\n        -ms-user-select: none;\n        -webkit-user-select: none;\n    }\n\n    body:hover .caption-window.ytp-caption-window-bottom {\n        margin-bottom: 49px;\n        overflow-wrap: normal;\n        display: block;\n    }\n\n    .ytp-caption-segment {\n        font-size: max(3.2vw, 13px) !important;\n    }\n"
                 : n === e.NT
-                ? "\n    .control-group-next {\n        display: none !important;\n    }\n\n    body:hover .player-timedtext {\n        margin-bottom: 49px;\n    }\n"
-                : n === e.DS
-                ? "\n    .control-group-next {\n        display: none !important;\n    }\n\n    .dss-hls-subtitle-overlay {\n        width: 100% !important;\n        height: 100% !important;\n    }\n\n    .dss-hls-subtitle-overlay .dss-subtitle-renderer-cue-positioning-box {\n        width: 100% !important;\n        height: auto !important;\n        top: auto !important;\n        bottom: 0 !important;\n    }\n\n    body:hover .dss-hls-subtitle-overlay .dss-subtitle-renderer-cue-positioning-box {\n        margin-bottom: 49px;\n    }\n\n    .dss-hls-subtitle-overlay span.dss-subtitle-renderer-cue {\n        font-size: max(2.8vw, 12px) !important;\n    }\n"
-                : n === e.PRV
-                ? "\n    .atvwebplayersdk-captions-overlay {\n        font-family: Arial, sans-serif;\n    }\n\n    .atvwebplayersdk-captions-overlay div:has(> p) {\n        bottom: 15px !important;\n    }\n\n    body:hover .atvwebplayersdk-captions-overlay p {\n        margin-bottom: 49px !important;\n    }\n\n    .atvwebplayersdk-captions-overlay span {\n        font-size: max(2.8vw, 12px) !important;\n    }\n"
-                : null;
+                  ? "\n    .control-group-next {\n        display: none !important;\n    }\n\n    body:hover .player-timedtext {\n        margin-bottom: 49px;\n    }\n"
+                  : n === e.DS
+                    ? "\n    .control-group-next {\n        display: none !important;\n    }\n\n    .dss-hls-subtitle-overlay {\n        width: 100% !important;\n        height: 100% !important;\n    }\n\n    .dss-hls-subtitle-overlay .dss-subtitle-renderer-cue-positioning-box {\n        width: 100% !important;\n        height: auto !important;\n        top: auto !important;\n        bottom: 0 !important;\n    }\n\n    body:hover .dss-hls-subtitle-overlay .dss-subtitle-renderer-cue-positioning-box {\n        margin-bottom: 49px;\n    }\n\n    .dss-hls-subtitle-overlay span.dss-subtitle-renderer-cue {\n        font-size: max(2.8vw, 12px) !important;\n    }\n"
+                    : n === e.PRV
+                      ? "\n    .atvwebplayersdk-captions-overlay {\n        font-family: Arial, sans-serif;\n    }\n\n    .atvwebplayersdk-captions-overlay div:has(> p) {\n        bottom: 15px !important;\n    }\n\n    body:hover .atvwebplayersdk-captions-overlay p {\n        margin-bottom: 49px !important;\n    }\n\n    .atvwebplayersdk-captions-overlay span {\n        font-size: max(2.8vw, 12px) !important;\n    }\n"
+                      : null;
             },
             enterPiPHandler: function (n, i) {
+          
               let r = o();
               if (r === e.YT) {
                 let n = document.querySelector(".ytp-caption-window-container");
@@ -72,17 +108,17 @@ var brightnessTriggerCount = 1;
                 n && i.append(n);
               } else if (r === e.DS) {
                 let e = document.querySelector(".dss-hls-subtitle-overlay");
-                e && i.append(e),
+                (e && i.append(e),
                   n.document
                     .querySelector("#pipProgress")
-                    .classList.add("disabled");
+                    .classList.add("disabled"));
               } else if (r === e.PRV) {
                 let n = document.querySelectorAll(
-                  ".atvwebplayersdk-captions-overlay"
+                  ".atvwebplayersdk-captions-overlay",
                 );
                 if (n.length) {
                   let e = n[n.length - 1];
-                  (t = e.parentElement), i.append(e);
+                  ((t = e.parentElement), i.append(e));
                 }
               }
             },
@@ -103,7 +139,7 @@ var brightnessTriggerCount = 1;
                 e && document.querySelector(".btm-media-client").append(e);
               } else if (i === e.PRV) {
                 let e = n.target.querySelector(
-                  ".atvwebplayersdk-captions-overlay"
+                  ".atvwebplayersdk-captions-overlay",
                 );
                 e && t && (t.append(e), (t = null));
               }
@@ -116,7 +152,7 @@ var brightnessTriggerCount = 1;
       var e = o[n];
       if (void 0 !== e) return e.exports;
       var r = (o[n] = { exports: {} });
-      return t[n](r, r.exports, i), r.exports;
+      return (t[n](r, r.exports, i), r.exports);
     }
     (() => {
       const t = i(944);
@@ -134,43 +170,63 @@ var brightnessTriggerCount = 1;
         const e = c(n);
         e && (e.paused ? e.play() : e.pause());
       }
-      function brightnessTrigger(n) {
+      function brightnessTrigger(n, noincrease = false) {
         const e = c(n);
         const videoWrapper = n.document.querySelector(".video-wrapper");
-        brightnessTriggerCount++;
-        console.log(brightnessTriggerCount);
+        if (!noincrease) brightnessTriggerCount++;
+        //console.log(brightnessTriggerCount);
 
-        if(brightnessTriggerCount > 8){ brightnessTriggerCount = 1;} 
+        if (brightnessTriggerCount > 8) {
+          brightnessTriggerCount = 1;
+        }
         //else if(brightnessTriggerCount <= 0){ brightnessTriggerCount = 6;}
 
-        if(brightnessTriggerCount == 1){
-            videoWrapper.style.filter = "brightness(100%)";
+        if (brightnessTriggerCount == 1) {
+          videoWrapper.style.filter = "brightness(100%)";
         }
-        if(brightnessTriggerCount == 2){
-            videoWrapper.style.filter = "brightness(80%)";
+        if (brightnessTriggerCount == 2) {
+          videoWrapper.style.filter = "brightness(80%)";
         }
-        if(brightnessTriggerCount == 3){
-            videoWrapper.style.filter = "brightness(60%)";
+        if (brightnessTriggerCount == 3) {
+          videoWrapper.style.filter = "brightness(60%)";
         }
-        if(brightnessTriggerCount == 4){
-            videoWrapper.style.filter = "brightness(50%)";
+        if (brightnessTriggerCount == 4) {
+          videoWrapper.style.filter = "brightness(50%)";
         }
-        if(brightnessTriggerCount == 5){
-            videoWrapper.style.filter = "brightness(40%)";
+        if (brightnessTriggerCount == 5) {
+          videoWrapper.style.filter = "brightness(40%)";
         }
-        if(brightnessTriggerCount == 6){
-            videoWrapper.style.filter = "brightness(30%)";
+        if (brightnessTriggerCount == 6) {
+          videoWrapper.style.filter = "brightness(30%)";
         }
-        if(brightnessTriggerCount == 7){
-            videoWrapper.style.filter = "brightness(20%)";
+        if (brightnessTriggerCount == 7) {
+          videoWrapper.style.filter = "brightness(20%)";
         }
-        if(brightnessTriggerCount == 8){
-            videoWrapper.style.filter = "brightness(10%)";
+        if (brightnessTriggerCount == 8) {
+          videoWrapper.style.filter = "brightness(10%)";
         }
 
-        console.log(brightnessTriggerCount);
+        // console.log(brightnessTriggerCount);
         //e && (e.paused ? e.play() : e.pause());
       }
+      function toggleAutodark(n) {
+        autodark = !autodark;
+
+        if (autodark) {
+          Autodark_ON(n);
+        } else {
+          Autodark_OFF(n);
+        }
+      }
+
+      function Autodark_ON(n) {
+        const videoWrapper = n.document.querySelector(".video-wrapper");
+        videoWrapper.style.filter = "brightness(0%)";
+      }
+      function Autodark_OFF(n) {
+        brightnessTrigger(n, true);
+      }
+
       function d() {
         return !!window.location.href.match(/https:\/\/.+\.netflix\.com\//);
       }
@@ -184,8 +240,8 @@ var brightnessTriggerCount = 1;
               window.netflix.appContext.state.playerApp.getAPI()
                 .videoPlayer).getAllPlayerSessionIds()[0]),
             e.getVideoPlayerBySessionId(t));
-        i.seek(i.getCurrentTime() + o),
-          document.documentElement.removeAttribute("seeking");
+        (i.seek(i.getCurrentTime() + o),
+          document.documentElement.removeAttribute("seeking"));
       }
       function C(n) {
         let e = n.value + "%";
@@ -196,13 +252,37 @@ var brightnessTriggerCount = 1;
           ? parseFloat(document.body.getAttribute("data-duration"))
           : n.duration;
       }
+      async function getFileContent(url) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Network response was not ok");
+          const text = await response.text();
+          console.log(text); // File content as a string
+          return text;
+        } catch (error) {
+          console.error("There was a problem fetching the file:", error);
+        }
+      }
+      function getMainContentHTML() {
+        var htmlcontent = this.getFileContent("mainContent.html");
+        // console.log(htmlcontent)
+      }
       function m(n, e, t) {
+        // getMainContentHTML();
+
+        e.addEventListener("mouseover", () => {
+          if (autodark) Autodark_OFF(n);
+        });
+        e.addEventListener("mouseout", () => {
+          if (autodark) Autodark_ON(n);
+        });
         n.document.querySelector("#pipController") ||
           ((modal = n.document.createElement("div")),
           (modal.id = "pipController"),
           s(
             modal,
-            '<span class="subtitles hidden"> </span>\n<div class="controls">\n<div class="control-row">\n<input id="pipProgress" type="range" min="0" max="100" step="0.1" />\n</div>\n<div class="control-row second-row">\n<div class="control-group">\n<button data-action="play" title="Play / Pause" class="pip-play">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 2.707031 2.855469 C 2.707031 1.933594 3.699219 1.34375 4.507812 1.785156 L 11.207031 5.429688 C 12.054688 5.890625 12.054688 7.109375 11.207031 7.570312 L 4.507812 11.214844 C 3.699219 11.65625 2.707031 11.066406 2.707031 10.144531 Z M 2.707031 2.855469 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="brightness" title="Brightness" class="pip-brightness">\n<svg fill="#000000" width="13px" height="13px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nviewBox="0 0 30.736 30.736" xml:space="preserve">\n<g id="surface1">\n<path d="M15.367,8.547c-3.768,0-6.822,3.059-6.822,6.818c0,3.768,3.055,6.824,6.822,6.824s6.816-3.057,6.816-6.824\nC22.184,11.605,19.135,8.547,15.367,8.547z M15.587,21.076c0-1.262,0-8.49,0-11.414c3.154,0,5.705,2.559,5.705,5.703\nC21.292,18.518,18.74,21.076,15.587,21.076z"/>\n<path d="M14.122,6.6V1.244C14.122,0.555,14.677,0,15.363,0l0,0c0.691,0,1.247,0.555,1.247,1.244l0,0V6.6\nc0,0.688-0.556,1.242-1.247,1.242l0,0C14.677,7.842,14.122,7.287,14.122,6.6L14.122,6.6z"/>\n<path d="M14.122,29.488v-5.35c0-0.689,0.556-1.246,1.242-1.246l0,0c0.691,0,1.247,0.557,1.247,1.246l0,0v5.35\nc0,0.689-0.556,1.248-1.247,1.248l0,0C14.677,30.736,14.122,30.178,14.122,29.488L14.122,29.488z"/>\n<path d="M20.691,10.045c-0.485-0.484-0.485-1.273,0-1.758l0,0l3.784-3.785c0.486-0.484,1.273-0.484,1.761,0l0,0\nc0.485,0.486,0.485,1.275,0,1.76l0,0l-3.788,3.783c-0.241,0.242-0.56,0.367-0.879,0.367l0,0\nC21.25,10.412,20.932,10.287,20.691,10.045L20.691,10.045z"/>\n<path d="M4.498,26.234c-0.486-0.484-0.486-1.273,0-1.76l0,0l3.788-3.783c0.487-0.484,1.274-0.484,1.76,0l0,0\nc0.488,0.48,0.488,1.271,0,1.754l0,0l-3.783,3.789C6.017,26.477,5.7,26.596,5.38,26.596l0,0\nC5.061,26.596,4.743,26.477,4.498,26.234L4.498,26.234z"/>\n<path d="M24.139,16.613c-0.689,0-1.25-0.559-1.25-1.248l0,0c0-0.684,0.561-1.242,1.25-1.242l0,0h5.35\nc0.689,0,1.246,0.559,1.246,1.242l0,0c0,0.689-0.557,1.248-1.246,1.248l0,0H24.139L24.139,16.613z"/>\n<path d="M1.244,16.613C0.553,16.613,0,16.055,0,15.365l0,0c0-0.684,0.553-1.242,1.244-1.242l0,0h5.349\nc0.688,0,1.249,0.559,1.249,1.242l0,0c0,0.689-0.561,1.248-1.249,1.248l0,0L1.244,16.613L1.244,16.613z"/>\n<path d="M24.476,26.234l-3.784-3.789c-0.485-0.482-0.485-1.273,0-1.754l0,0c0.481-0.484,1.274-0.484,1.757,0l0,0l3.788,3.783\nc0.485,0.486,0.485,1.275,0,1.76l0,0c-0.247,0.242-0.564,0.361-0.883,0.361l0,0C25.031,26.596,24.715,26.477,24.476,26.234\nL24.476,26.234z"/>\n<path d="M8.285,10.045L4.498,6.262c-0.486-0.484-0.486-1.273,0-1.76l0,0c0.49-0.484,1.279-0.484,1.765,0l0,0l3.783,3.785\nc0.488,0.484,0.488,1.273,0,1.758l0,0c-0.246,0.242-0.562,0.367-0.882,0.367l0,0C8.846,10.412,8.526,10.287,8.285,10.045\nL8.285,10.045z"/>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="rewind" title="Rewind">\n<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 1.625 1.21875 C 1.480469 1.21875 1.34375 1.277344 1.242188 1.378906 C 1.140625 1.480469 1.082031 1.617188 1.082031 1.761719 L 1.082031 4.875 C 1.082031 5.019531 1.140625 5.15625 1.242188 5.257812 C 1.34375 5.359375 1.480469 5.417969 1.625 5.417969 L 4.46875 5.417969 C 4.613281 5.417969 4.75 5.359375 4.851562 5.257812 C 4.953125 5.15625 5.011719 5.019531 5.011719 4.875 C 5.011719 4.730469 4.953125 4.59375 4.851562 4.492188 C 4.75 4.390625 4.613281 4.332031 4.46875 4.332031 L 2.632812 4.332031 C 3.167969 3.695312 3.832031 3.1875 4.628906 2.941406 C 5.710938 2.601562 6.875 2.632812 7.9375 3.027344 C 9.007812 3.425781 10 4.238281 10.492188 5.136719 C 10.5625 5.261719 10.679688 5.355469 10.816406 5.398438 C 10.953125 5.4375 11.101562 5.421875 11.230469 5.351562 C 11.355469 5.28125 11.449219 5.167969 11.488281 5.027344 C 11.527344 4.890625 11.511719 4.742188 11.445312 4.617188 C 10.808594 3.457031 9.59375 2.488281 8.3125 2.011719 C 7.027344 1.535156 5.617188 1.496094 4.308594 1.90625 C 3.453125 2.171875 2.746094 2.652344 2.167969 3.238281 L 2.167969 1.761719 C 2.167969 1.617188 2.109375 1.480469 2.007812 1.378906 C 1.90625 1.277344 1.769531 1.21875 1.625 1.21875 Z M 5.28125 6.5 C 5.28125 6.390625 5.246094 6.28125 5.183594 6.191406 C 5.121094 6.097656 5.03125 6.03125 4.925781 5.992188 C 4.820312 5.953125 4.707031 5.949219 4.601562 5.976562 C 4.496094 6.003906 4.398438 6.066406 4.328125 6.148438 L 4.207031 6.292969 C 3.925781 6.628906 3.621094 7 2.972656 7.390625 C 2.847656 7.464844 2.757812 7.582031 2.722656 7.722656 C 2.691406 7.863281 2.710938 8.007812 2.785156 8.132812 C 2.859375 8.257812 2.980469 8.34375 3.117188 8.378906 C 3.257812 8.414062 3.40625 8.394531 3.527344 8.320312 C 3.789062 8.160156 4.011719 8.003906 4.199219 7.851562 L 4.199219 10.832031 C 4.199219 10.976562 4.253906 11.113281 4.355469 11.214844 C 4.457031 11.316406 4.597656 11.375 4.738281 11.375 C 4.882812 11.375 5.019531 11.316406 5.121094 11.214844 C 5.222656 11.113281 5.28125 10.976562 5.28125 10.832031 Z M 8.800781 5.957031 C 8.050781 5.957031 7.503906 6.300781 7.171875 6.859375 C 6.867188 7.371094 6.769531 8.027344 6.769531 8.667969 C 6.769531 9.304688 6.867188 9.960938 7.171875 10.476562 C 7.503906 11.03125 8.050781 11.375 8.800781 11.375 C 9.554688 11.375 10.101562 11.03125 10.429688 10.476562 C 10.738281 9.960938 10.832031 9.304688 10.832031 8.667969 C 10.832031 8.027344 10.738281 7.371094 10.429688 6.859375 C 10.101562 6.300781 9.554688 5.957031 8.800781 5.957031 Z M 7.855469 8.667969 C 7.855469 8.109375 7.945312 7.679688 8.105469 7.410156 C 8.238281 7.183594 8.4375 7.042969 8.800781 7.042969 C 9.167969 7.042969 9.363281 7.183594 9.5 7.410156 C 9.660156 7.679688 9.75 8.109375 9.75 8.667969 C 9.75 9.226562 9.660156 9.652344 9.5 9.921875 C 9.363281 10.152344 9.167969 10.292969 8.800781 10.292969 C 8.4375 10.292969 8.238281 10.152344 8.105469 9.921875 C 7.945312 9.652344 7.855469 9.226562 7.855469 8.667969 Z M 7.855469 8.667969 " />\n</g>\n</svg>\n<path fill-rule="evenodd" clip-rule="evenodd"\nd="M11.0198 2.04817C13.3222 1.8214 15.6321 2.39998 17.5557 3.68532C19.4794 4.97066 20.8978 6.88324 21.5694 9.09717C22.241 11.3111 22.1242 13.6894 21.2388 15.8269C20.3534 17.9643 18.7543 19.7286 16.714 20.8192C14.6736 21.9098 12.3182 22.2592 10.0491 21.8079C7.77999 21.3565 5.73759 20.1323 4.26989 18.3439C2.80219 16.5555 2 14.3136 2 12L0 12C-2.74181e-06 14.7763 0.962627 17.4666 2.72387 19.6127C4.48511 21.7588 6.93599 23.2278 9.65891 23.7694C12.3818 24.3111 15.2083 23.8918 17.6568 22.5831C20.1052 21.2744 22.0241 19.1572 23.0866 16.5922C24.149 14.0273 24.2892 11.1733 23.4833 8.51661C22.6774 5.85989 20.9752 3.56479 18.6668 2.02238C16.3585 0.479973 13.5867 -0.214321 10.8238 0.0578004C8.71195 0.265799 6.70517 1.02858 5 2.2532V1H3V5C3 5.55228 3.44772 6 4 6H8V4H5.99999C7.45608 2.90793 9.19066 2.22833 11.0198 2.04817ZM2 4V7H5V9H1C0.447715 9 0 8.55228 0 8V4H2ZM14.125 16C13.5466 16 13.0389 15.8586 12.6018 15.5758C12.1713 15.2865 11.8385 14.8815 11.6031 14.3609C11.3677 13.8338 11.25 13.2135 11.25 12.5C11.25 11.7929 11.3677 11.1758 11.6031 10.6488C11.8385 10.1217 12.1713 9.71671 12.6018 9.43388C13.0389 9.14463 13.5466 9 14.125 9C14.7034 9 15.2077 9.14463 15.6382 9.43388C16.0753 9.71671 16.4116 10.1217 16.6469 10.6488C16.8823 11.1758 17 11.7929 17 12.5C17 13.2135 16.8823 13.8338 16.6469 14.3609C16.4116 14.8815 16.0753 15.2865 15.6382 15.5758C15.2077 15.8586 14.7034 16 14.125 16ZM14.125 14.6501C14.5151 14.6501 14.8211 14.4637 15.043 14.0909C15.2649 13.7117 15.3759 13.1814 15.3759 12.5C15.3759 11.8186 15.2649 11.2916 15.043 10.9187C14.8211 10.5395 14.5151 10.3499 14.125 10.3499C13.7349 10.3499 13.4289 10.5395 13.207 10.9187C12.9851 11.2916 12.8741 11.8186 12.8741 12.5C12.8741 13.1814 12.9851 13.7117 13.207 14.0909C13.4289 14.4637 13.7349 14.6501 14.125 14.6501ZM8.60395 15.8554V10.7163L7 11.1405V9.81956L10.1978 9.01928V15.8554H8.60395Z"\nfill="currentColor" />\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="forward" title="Forward">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 11.375 1.21875 C 11.519531 1.21875 11.65625 1.277344 11.757812 1.378906 C 11.859375 1.480469 11.917969 1.617188 11.917969 1.761719 L 11.917969 4.875 C 11.917969 5.019531 11.859375 5.15625 11.757812 5.257812 C 11.65625 5.359375 11.519531 5.417969 11.375 5.417969 L 8.53125 5.417969 C 8.386719 5.417969 8.25 5.359375 8.148438 5.257812 C 8.046875 5.15625 7.988281 5.019531 7.988281 4.875 C 7.988281 4.730469 8.046875 4.59375 8.148438 4.492188 C 8.25 4.390625 8.386719 4.332031 8.53125 4.332031 L 10.367188 4.332031 C 9.832031 3.695312 9.167969 3.1875 8.371094 2.941406 C 7.289062 2.601562 6.125 2.632812 5.0625 3.027344 C 3.992188 3.425781 3 4.238281 2.507812 5.136719 C 2.472656 5.199219 2.425781 5.253906 2.371094 5.300781 C 2.316406 5.34375 2.25 5.375 2.183594 5.398438 C 2.113281 5.417969 2.042969 5.421875 1.972656 5.414062 C 1.902344 5.40625 1.832031 5.386719 1.769531 5.351562 C 1.707031 5.316406 1.652344 5.273438 1.609375 5.214844 C 1.5625 5.160156 1.53125 5.097656 1.511719 5.027344 C 1.472656 4.890625 1.488281 4.742188 1.554688 4.617188 C 2.191406 3.457031 3.40625 2.488281 4.6875 2.011719 C 5.972656 1.535156 7.382812 1.496094 8.691406 1.90625 C 9.546875 2.171875 10.253906 2.652344 10.832031 3.238281 L 10.832031 1.761719 C 10.832031 1.617188 10.890625 1.480469 10.992188 1.378906 C 11.09375 1.277344 11.230469 1.21875 11.375 1.21875 Z M 4.925781 5.992188 C 5.03125 6.03125 5.121094 6.097656 5.183594 6.191406 C 5.246094 6.28125 5.28125 6.390625 5.28125 6.5 L 5.28125 10.832031 C 5.28125 10.976562 5.222656 11.113281 5.121094 11.214844 C 5.019531 11.316406 4.882812 11.375 4.738281 11.375 C 4.597656 11.375 4.457031 11.316406 4.355469 11.214844 C 4.253906 11.113281 4.199219 10.976562 4.199219 10.832031 L 4.199219 7.851562 C 4.011719 8.003906 3.789062 8.160156 3.527344 8.320312 C 3.46875 8.355469 3.398438 8.378906 3.328125 8.390625 C 3.257812 8.398438 3.1875 8.398438 3.117188 8.378906 C 3.050781 8.363281 2.984375 8.332031 2.925781 8.289062 C 2.871094 8.246094 2.820312 8.195312 2.785156 8.132812 C 2.75 8.070312 2.726562 8.003906 2.714844 7.933594 C 2.703125 7.863281 2.707031 7.792969 2.722656 7.722656 C 2.742188 7.652344 2.773438 7.589844 2.816406 7.53125 C 2.855469 7.472656 2.910156 7.425781 2.972656 7.390625 C 3.621094 7 3.925781 6.632812 4.207031 6.292969 C 4.246094 6.246094 4.285156 6.195312 4.328125 6.148438 C 4.398438 6.066406 4.496094 6.003906 4.601562 5.976562 C 4.710938 5.949219 4.824219 5.953125 4.925781 5.992188 Z M 7.171875 6.859375 C 7.503906 6.300781 8.050781 5.957031 8.800781 5.957031 C 9.554688 5.957031 10.101562 6.300781 10.429688 6.859375 C 10.738281 7.371094 10.832031 8.027344 10.832031 8.667969 C 10.832031 9.304688 10.738281 9.960938 10.429688 10.476562 C 10.101562 11.03125 9.554688 11.375 8.800781 11.375 C 8.050781 11.375 7.503906 11.03125 7.171875 10.476562 C 6.867188 9.960938 6.769531 9.304688 6.769531 8.667969 C 6.769531 8.027344 6.867188 7.371094 7.171875 6.859375 Z M 8.105469 7.410156 C 7.945312 7.679688 7.855469 8.109375 7.855469 8.667969 C 7.855469 9.226562 7.945312 9.652344 8.105469 9.921875 C 8.238281 10.152344 8.4375 10.292969 8.800781 10.292969 C 9.167969 10.292969 9.363281 10.152344 9.5 9.921875 C 9.660156 9.652344 9.75 9.226562 9.75 8.667969 C 9.75 8.109375 9.660156 7.679688 9.5 7.410156 C 9.363281 7.183594 9.167969 7.042969 8.800781 7.042969 C 8.4375 7.042969 8.242188 7.183594 8.105469 7.410156 Z M 8.105469 7.410156 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group control-group-next">\n<button data-action="next" title="Next video">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 1.625 2.574219 C 1.625 1.8125 2.480469 1.359375 3.109375 1.792969 L 8.796875 5.6875 C 8.921875 5.777344 9.027344 5.890625 9.097656 6.027344 C 9.167969 6.164062 9.207031 6.3125 9.207031 6.46875 C 9.207031 6.621094 9.171875 6.773438 9.101562 6.910156 C 9.03125 7.042969 8.925781 7.160156 8.800781 7.25 L 3.113281 11.203125 C 2.484375 11.640625 1.625 11.191406 1.625 10.425781 Z M 11.375 2.03125 C 11.375 1.921875 11.332031 1.820312 11.257812 1.742188 C 11.179688 1.667969 11.078125 1.625 10.96875 1.625 C 10.859375 1.625 10.757812 1.667969 10.679688 1.742188 C 10.605469 1.820312 10.5625 1.921875 10.5625 2.03125 L 10.5625 10.96875 C 10.5625 11.078125 10.605469 11.179688 10.679688 11.257812 C 10.757812 11.332031 10.859375 11.375 10.96875 11.375 C 11.078125 11.375 11.179688 11.332031 11.257812 11.257812 C 11.332031 11.179688 11.375 11.078125 11.375 10.96875 Z M 11.375 2.03125 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="mute" title="Mute / Unmute" class="pip-unmuted">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 8.125 2.300781 L 8.125 10.695312 C 8.125 11.28125 7.433594 11.589844 7 11.203125 L 4.566406 9.039062 C 4.492188 8.972656 4.394531 8.9375 4.296875 8.9375 L 2.300781 8.9375 C 2.140625 8.9375 1.984375 8.90625 1.835938 8.84375 C 1.6875 8.78125 1.554688 8.691406 1.441406 8.578125 C 1.328125 8.464844 1.238281 8.332031 1.175781 8.183594 C 1.113281 8.035156 1.082031 7.878906 1.082031 7.71875 L 1.082031 5.28125 C 1.082031 4.957031 1.210938 4.648438 1.441406 4.417969 C 1.667969 4.191406 1.980469 4.0625 2.300781 4.0625 L 4.296875 4.0625 C 4.394531 4.0625 4.492188 4.027344 4.566406 3.960938 L 6.996094 1.796875 C 7.433594 1.410156 8.125 1.71875 8.125 2.300781 Z M 10.289062 3.195312 C 10.375 3.128906 10.480469 3.101562 10.589844 3.121094 C 10.695312 3.136719 10.792969 3.191406 10.855469 3.277344 C 11.546875 4.210938 11.917969 5.339844 11.917969 6.5 C 11.917969 7.660156 11.546875 8.789062 10.855469 9.722656 C 10.789062 9.804688 10.695312 9.863281 10.589844 9.875 C 10.484375 9.890625 10.375 9.863281 10.289062 9.800781 C 10.203125 9.738281 10.148438 9.644531 10.132812 9.539062 C 10.113281 9.433594 10.140625 9.324219 10.203125 9.238281 C 10.789062 8.445312 11.105469 7.484375 11.105469 6.5 C 11.105469 5.515625 10.789062 4.554688 10.203125 3.761719 C 10.171875 3.71875 10.148438 3.671875 10.132812 3.621094 C 10.121094 3.566406 10.117188 3.515625 10.125 3.460938 C 10.132812 3.40625 10.152344 3.355469 10.179688 3.3125 C 10.207031 3.265625 10.246094 3.226562 10.289062 3.195312 Z M 9.285156 4.535156 C 9.332031 4.507812 9.382812 4.492188 9.4375 4.488281 C 9.492188 4.480469 9.542969 4.484375 9.59375 4.5 C 9.644531 4.515625 9.695312 4.542969 9.734375 4.574219 C 9.777344 4.609375 9.8125 4.652344 9.835938 4.699219 C 10.128906 5.234375 10.292969 5.847656 10.292969 6.5 C 10.292969 7.128906 10.136719 7.75 9.835938 8.304688 C 9.8125 8.351562 9.777344 8.390625 9.734375 8.425781 C 9.695312 8.457031 9.644531 8.484375 9.59375 8.5 C 9.542969 8.515625 9.492188 8.519531 9.4375 8.515625 C 9.382812 8.507812 9.332031 8.492188 9.285156 8.46875 C 9.238281 8.441406 9.199219 8.40625 9.164062 8.367188 C 9.128906 8.324219 9.105469 8.277344 9.089844 8.226562 C 9.074219 8.175781 9.070312 8.121094 9.074219 8.066406 C 9.082031 8.015625 9.097656 7.964844 9.121094 7.917969 C 9.355469 7.480469 9.480469 6.996094 9.480469 6.5 C 9.480469 5.988281 9.347656 5.503906 9.121094 5.085938 C 9.070312 4.988281 9.058594 4.878906 9.089844 4.773438 C 9.121094 4.671875 9.191406 4.585938 9.285156 4.535156 Z M 9.285156 4.535156 " />\n</g>\n</svg>\n</button>\n<input id="pipVolume" type="range" min="0" max="100" />\n</div>\n<div class="control-group align-right">\n<button data-action="crop" title="Remove borders">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="13px" height="13px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 4.527344 9.203125 C 4.324219 9.183594 4.136719 9.089844 4.003906 8.941406 C 3.867188 8.792969 3.792969 8.597656 3.792969 8.394531 L 3.792969 1.625 L 3.789062 1.5625 C 3.773438 1.425781 3.703125 1.300781 3.597656 1.210938 C 3.492188 1.121094 3.355469 1.078125 3.21875 1.085938 C 3.082031 1.09375 2.949219 1.152344 2.855469 1.253906 C 2.761719 1.355469 2.707031 1.488281 2.707031 1.625 L 2.707031 2.707031 L 1.625 2.707031 L 1.5625 2.710938 C 1.425781 2.726562 1.300781 2.796875 1.210938 2.902344 C 1.121094 3.007812 1.078125 3.144531 1.085938 3.28125 C 1.09375 3.417969 1.152344 3.550781 1.253906 3.644531 C 1.355469 3.738281 1.488281 3.792969 1.625 3.792969 L 2.707031 3.792969 L 2.707031 8.394531 L 2.710938 8.5 C 2.738281 8.984375 2.949219 9.441406 3.300781 9.773438 C 3.652344 10.105469 4.121094 10.292969 4.605469 10.292969 L 7.136719 10.292969 L 7.066406 10.269531 L 7.058594 10.265625 C 6.851562 10.191406 6.679688 10.039062 6.585938 9.84375 C 6.488281 9.644531 6.472656 9.417969 6.542969 9.207031 L 4.605469 9.207031 Z M 10.292969 7.175781 L 10.253906 7.0625 L 10.253906 7.058594 C 10.179688 6.851562 10.03125 6.683594 9.835938 6.585938 C 9.640625 6.488281 9.414062 6.472656 9.207031 6.539062 L 9.207031 4.605469 C 9.207031 4.402344 9.132812 4.207031 8.996094 4.058594 C 8.863281 3.910156 8.675781 3.816406 8.472656 3.796875 L 8.394531 3.792969 L 4.332031 3.792969 L 4.332031 2.707031 L 8.394531 2.707031 C 8.878906 2.707031 9.347656 2.894531 9.699219 3.226562 C 10.050781 3.5625 10.261719 4.015625 10.289062 4.5 L 10.292969 4.605469 Z M 12.574219 6.808594 L 12.90625 6.917969 L 12.914062 6.917969 C 12.9375 6.929688 12.960938 6.945312 12.976562 6.96875 C 12.992188 6.988281 13 7.015625 13 7.042969 C 13 7.070312 12.992188 7.097656 12.976562 7.117188 C 12.960938 7.140625 12.9375 7.15625 12.914062 7.167969 L 12.582031 7.273438 C 12.480469 7.308594 12.386719 7.363281 12.3125 7.4375 C 12.238281 7.515625 12.179688 7.605469 12.148438 7.707031 L 12.039062 8.039062 C 12.035156 8.058594 12.023438 8.074219 12.007812 8.089844 C 11.992188 8.101562 11.976562 8.113281 11.957031 8.121094 C 11.9375 8.125 11.917969 8.128906 11.894531 8.125 C 11.875 8.121094 11.855469 8.113281 11.839844 8.101562 C 11.820312 8.085938 11.800781 8.0625 11.792969 8.039062 L 11.683594 7.707031 C 11.652344 7.605469 11.59375 7.511719 11.519531 7.4375 C 11.445312 7.363281 11.351562 7.304688 11.253906 7.273438 L 10.921875 7.164062 C 10.894531 7.15625 10.871094 7.136719 10.855469 7.117188 C 10.839844 7.09375 10.832031 7.066406 10.832031 7.039062 C 10.832031 7.011719 10.839844 6.988281 10.855469 6.964844 C 10.871094 6.941406 10.894531 6.925781 10.921875 6.917969 L 11.253906 6.808594 C 11.351562 6.777344 11.441406 6.71875 11.515625 6.644531 C 11.589844 6.570312 11.644531 6.476562 11.679688 6.378906 L 11.785156 6.046875 C 11.796875 6.019531 11.8125 5.996094 11.835938 5.980469 C 11.855469 5.964844 11.882812 5.957031 11.910156 5.957031 C 11.9375 5.957031 11.964844 5.964844 11.984375 5.980469 C 12.007812 5.996094 12.023438 6.019531 12.035156 6.046875 L 12.140625 6.378906 C 12.175781 6.476562 12.230469 6.570312 12.304688 6.644531 C 12.382812 6.71875 12.472656 6.777344 12.574219 6.808594 Z M 8.714844 10.515625 C 8.527344 10.273438 8.273438 10.09375 7.984375 9.996094 L 7.238281 9.753906 C 7.179688 9.734375 7.132812 9.695312 7.097656 9.648438 C 7.0625 9.597656 7.042969 9.539062 7.042969 9.476562 C 7.042969 9.417969 7.0625 9.355469 7.097656 9.308594 C 7.132812 9.257812 7.179688 9.21875 7.238281 9.199219 L 7.984375 8.957031 C 8.207031 8.878906 8.40625 8.753906 8.570312 8.589844 C 8.734375 8.425781 8.863281 8.222656 8.9375 8.003906 L 8.945312 7.984375 L 9.1875 7.238281 C 9.207031 7.179688 9.242188 7.128906 9.292969 7.09375 C 9.34375 7.058594 9.402344 7.039062 9.464844 7.039062 C 9.523438 7.039062 9.585938 7.058594 9.636719 7.09375 C 9.683594 7.128906 9.722656 7.179688 9.742188 7.238281 L 9.984375 7.984375 C 10.058594 8.210938 10.1875 8.417969 10.355469 8.585938 C 10.527344 8.753906 10.730469 8.882812 10.960938 8.957031 L 11.703125 9.199219 L 11.71875 9.203125 C 11.777344 9.222656 11.828125 9.261719 11.863281 9.3125 C 11.898438 9.359375 11.914062 9.421875 11.914062 9.480469 C 11.914062 9.542969 11.898438 9.601562 11.863281 9.652344 C 11.828125 9.699219 11.777344 9.738281 11.71875 9.757812 L 10.972656 10 C 10.746094 10.078125 10.539062 10.203125 10.371094 10.371094 C 10.203125 10.542969 10.074219 10.746094 10 10.972656 L 9.757812 11.71875 L 9.75 11.738281 C 9.726562 11.792969 9.6875 11.839844 9.636719 11.871094 C 9.585938 11.902344 9.527344 11.917969 9.46875 11.917969 C 9.410156 11.914062 9.351562 11.894531 9.304688 11.859375 C 9.257812 11.824219 9.222656 11.777344 9.203125 11.71875 L 8.957031 10.972656 C 8.90625 10.808594 8.820312 10.652344 8.714844 10.515625 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group control-group-time">\n<div class="control-time"></div>\n</div>\n</div>\n</div>'
+
+            '<span class="subtitles hidden"> </span>\n<div class="controls">\n<div class="control-row">\n<input id="pipProgress" type="range" min="0" max="100" step="0.1" />\n</div>\n<div class="control-row second-row">\n<div class="control-group">\n<button data-action="play" title="Play / Pause" class="pip-play">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 2.707031 2.855469 C 2.707031 1.933594 3.699219 1.34375 4.507812 1.785156 L 11.207031 5.429688 C 12.054688 5.890625 12.054688 7.109375 11.207031 7.570312 L 4.507812 11.214844 C 3.699219 11.65625 2.707031 11.066406 2.707031 10.144531 Z M 2.707031 2.855469 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="brightness" title="Brightness" class="pip-brightness">\n<svg fill="#000000" width="10px" height="10px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nviewBox="0 0 30.736 30.736" xml:space="preserve">\n<g id="surface1">\n<path d="M15.367,8.547c-3.768,0-6.822,3.059-6.822,6.818c0,3.768,3.055,6.824,6.822,6.824s6.816-3.057,6.816-6.824\nC22.184,11.605,19.135,8.547,15.367,8.547z M15.587,21.076c0-1.262,0-8.49,0-11.414c3.154,0,5.705,2.559,5.705,5.703\nC21.292,18.518,18.74,21.076,15.587,21.076z"/>\n<path d="M14.122,6.6V1.244C14.122,0.555,14.677,0,15.363,0l0,0c0.691,0,1.247,0.555,1.247,1.244l0,0V6.6\nc0,0.688-0.556,1.242-1.247,1.242l0,0C14.677,7.842,14.122,7.287,14.122,6.6L14.122,6.6z"/>\n<path d="M14.122,29.488v-5.35c0-0.689,0.556-1.246,1.242-1.246l0,0c0.691,0,1.247,0.557,1.247,1.246l0,0v5.35\nc0,0.689-0.556,1.248-1.247,1.248l0,0C14.677,30.736,14.122,30.178,14.122,29.488L14.122,29.488z"/>\n<path d="M20.691,10.045c-0.485-0.484-0.485-1.273,0-1.758l0,0l3.784-3.785c0.486-0.484,1.273-0.484,1.761,0l0,0\nc0.485,0.486,0.485,1.275,0,1.76l0,0l-3.788,3.783c-0.241,0.242-0.56,0.367-0.879,0.367l0,0\nC21.25,10.412,20.932,10.287,20.691,10.045L20.691,10.045z"/>\n<path d="M4.498,26.234c-0.486-0.484-0.486-1.273,0-1.76l0,0l3.788-3.783c0.487-0.484,1.274-0.484,1.76,0l0,0\nc0.488,0.48,0.488,1.271,0,1.754l0,0l-3.783,3.789C6.017,26.477,5.7,26.596,5.38,26.596l0,0\nC5.061,26.596,4.743,26.477,4.498,26.234L4.498,26.234z"/>\n<path d="M24.139,16.613c-0.689,0-1.25-0.559-1.25-1.248l0,0c0-0.684,0.561-1.242,1.25-1.242l0,0h5.35\nc0.689,0,1.246,0.559,1.246,1.242l0,0c0,0.689-0.557,1.248-1.246,1.248l0,0H24.139L24.139,16.613z"/>\n<path d="M1.244,16.613C0.553,16.613,0,16.055,0,15.365l0,0c0-0.684,0.553-1.242,1.244-1.242l0,0h5.349\nc0.688,0,1.249,0.559,1.249,1.242l0,0c0,0.689-0.561,1.248-1.249,1.248l0,0L1.244,16.613L1.244,16.613z"/>\n<path d="M24.476,26.234l-3.784-3.789c-0.485-0.482-0.485-1.273,0-1.754l0,0c0.481-0.484,1.274-0.484,1.757,0l0,0l3.788,3.783\nc0.485,0.486,0.485,1.275,0,1.76l0,0c-0.247,0.242-0.564,0.361-0.883,0.361l0,0C25.031,26.596,24.715,26.477,24.476,26.234\nL24.476,26.234z"/>\n<path d="M8.285,10.045L4.498,6.262c-0.486-0.484-0.486-1.273,0-1.76l0,0c0.49-0.484,1.279-0.484,1.765,0l0,0l3.783,3.785\nc0.488,0.484,0.488,1.273,0,1.758l0,0c-0.246,0.242-0.562,0.367-0.882,0.367l0,0C8.846,10.412,8.526,10.287,8.285,10.045\nL8.285,10.045z"/>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group"><button data-action="autodark" title="Auto Darken" class="pip-autodark-off"> <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#000000" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg> </button>\n</div>\n<div class="control-group">\n<button data-action="rewind" title="Rewind">\n<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 1.625 1.21875 C 1.480469 1.21875 1.34375 1.277344 1.242188 1.378906 C 1.140625 1.480469 1.082031 1.617188 1.082031 1.761719 L 1.082031 4.875 C 1.082031 5.019531 1.140625 5.15625 1.242188 5.257812 C 1.34375 5.359375 1.480469 5.417969 1.625 5.417969 L 4.46875 5.417969 C 4.613281 5.417969 4.75 5.359375 4.851562 5.257812 C 4.953125 5.15625 5.011719 5.019531 5.011719 4.875 C 5.011719 4.730469 4.953125 4.59375 4.851562 4.492188 C 4.75 4.390625 4.613281 4.332031 4.46875 4.332031 L 2.632812 4.332031 C 3.167969 3.695312 3.832031 3.1875 4.628906 2.941406 C 5.710938 2.601562 6.875 2.632812 7.9375 3.027344 C 9.007812 3.425781 10 4.238281 10.492188 5.136719 C 10.5625 5.261719 10.679688 5.355469 10.816406 5.398438 C 10.953125 5.4375 11.101562 5.421875 11.230469 5.351562 C 11.355469 5.28125 11.449219 5.167969 11.488281 5.027344 C 11.527344 4.890625 11.511719 4.742188 11.445312 4.617188 C 10.808594 3.457031 9.59375 2.488281 8.3125 2.011719 C 7.027344 1.535156 5.617188 1.496094 4.308594 1.90625 C 3.453125 2.171875 2.746094 2.652344 2.167969 3.238281 L 2.167969 1.761719 C 2.167969 1.617188 2.109375 1.480469 2.007812 1.378906 C 1.90625 1.277344 1.769531 1.21875 1.625 1.21875 Z M 5.28125 6.5 C 5.28125 6.390625 5.246094 6.28125 5.183594 6.191406 C 5.121094 6.097656 5.03125 6.03125 4.925781 5.992188 C 4.820312 5.953125 4.707031 5.949219 4.601562 5.976562 C 4.496094 6.003906 4.398438 6.066406 4.328125 6.148438 L 4.207031 6.292969 C 3.925781 6.628906 3.621094 7 2.972656 7.390625 C 2.847656 7.464844 2.757812 7.582031 2.722656 7.722656 C 2.691406 7.863281 2.710938 8.007812 2.785156 8.132812 C 2.859375 8.257812 2.980469 8.34375 3.117188 8.378906 C 3.257812 8.414062 3.40625 8.394531 3.527344 8.320312 C 3.789062 8.160156 4.011719 8.003906 4.199219 7.851562 L 4.199219 10.832031 C 4.199219 10.976562 4.253906 11.113281 4.355469 11.214844 C 4.457031 11.316406 4.597656 11.375 4.738281 11.375 C 4.882812 11.375 5.019531 11.316406 5.121094 11.214844 C 5.222656 11.113281 5.28125 10.976562 5.28125 10.832031 Z M 8.800781 5.957031 C 8.050781 5.957031 7.503906 6.300781 7.171875 6.859375 C 6.867188 7.371094 6.769531 8.027344 6.769531 8.667969 C 6.769531 9.304688 6.867188 9.960938 7.171875 10.476562 C 7.503906 11.03125 8.050781 11.375 8.800781 11.375 C 9.554688 11.375 10.101562 11.03125 10.429688 10.476562 C 10.738281 9.960938 10.832031 9.304688 10.832031 8.667969 C 10.832031 8.027344 10.738281 7.371094 10.429688 6.859375 C 10.101562 6.300781 9.554688 5.957031 8.800781 5.957031 Z M 7.855469 8.667969 C 7.855469 8.109375 7.945312 7.679688 8.105469 7.410156 C 8.238281 7.183594 8.4375 7.042969 8.800781 7.042969 C 9.167969 7.042969 9.363281 7.183594 9.5 7.410156 C 9.660156 7.679688 9.75 8.109375 9.75 8.667969 C 9.75 9.226562 9.660156 9.652344 9.5 9.921875 C 9.363281 10.152344 9.167969 10.292969 8.800781 10.292969 C 8.4375 10.292969 8.238281 10.152344 8.105469 9.921875 C 7.945312 9.652344 7.855469 9.226562 7.855469 8.667969 Z M 7.855469 8.667969 " />\n</g>\n</svg>\n<path fill-rule="evenodd" clip-rule="evenodd"\nd="M11.0198 2.04817C13.3222 1.8214 15.6321 2.39998 17.5557 3.68532C19.4794 4.97066 20.8978 6.88324 21.5694 9.09717C22.241 11.3111 22.1242 13.6894 21.2388 15.8269C20.3534 17.9643 18.7543 19.7286 16.714 20.8192C14.6736 21.9098 12.3182 22.2592 10.0491 21.8079C7.77999 21.3565 5.73759 20.1323 4.26989 18.3439C2.80219 16.5555 2 14.3136 2 12L0 12C-2.74181e-06 14.7763 0.962627 17.4666 2.72387 19.6127C4.48511 21.7588 6.93599 23.2278 9.65891 23.7694C12.3818 24.3111 15.2083 23.8918 17.6568 22.5831C20.1052 21.2744 22.0241 19.1572 23.0866 16.5922C24.149 14.0273 24.2892 11.1733 23.4833 8.51661C22.6774 5.85989 20.9752 3.56479 18.6668 2.02238C16.3585 0.479973 13.5867 -0.214321 10.8238 0.0578004C8.71195 0.265799 6.70517 1.02858 5 2.2532V1H3V5C3 5.55228 3.44772 6 4 6H8V4H5.99999C7.45608 2.90793 9.19066 2.22833 11.0198 2.04817ZM2 4V7H5V9H1C0.447715 9 0 8.55228 0 8V4H2ZM14.125 16C13.5466 16 13.0389 15.8586 12.6018 15.5758C12.1713 15.2865 11.8385 14.8815 11.6031 14.3609C11.3677 13.8338 11.25 13.2135 11.25 12.5C11.25 11.7929 11.3677 11.1758 11.6031 10.6488C11.8385 10.1217 12.1713 9.71671 12.6018 9.43388C13.0389 9.14463 13.5466 9 14.125 9C14.7034 9 15.2077 9.14463 15.6382 9.43388C16.0753 9.71671 16.4116 10.1217 16.6469 10.6488C16.8823 11.1758 17 11.7929 17 12.5C17 13.2135 16.8823 13.8338 16.6469 14.3609C16.4116 14.8815 16.0753 15.2865 15.6382 15.5758C15.2077 15.8586 14.7034 16 14.125 16ZM14.125 14.6501C14.5151 14.6501 14.8211 14.4637 15.043 14.0909C15.2649 13.7117 15.3759 13.1814 15.3759 12.5C15.3759 11.8186 15.2649 11.2916 15.043 10.9187C14.8211 10.5395 14.5151 10.3499 14.125 10.3499C13.7349 10.3499 13.4289 10.5395 13.207 10.9187C12.9851 11.2916 12.8741 11.8186 12.8741 12.5C12.8741 13.1814 12.9851 13.7117 13.207 14.0909C13.4289 14.4637 13.7349 14.6501 14.125 14.6501ZM8.60395 15.8554V10.7163L7 11.1405V9.81956L10.1978 9.01928V15.8554H8.60395Z"\nfill="currentColor" />\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="forward" title="Forward">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 11.375 1.21875 C 11.519531 1.21875 11.65625 1.277344 11.757812 1.378906 C 11.859375 1.480469 11.917969 1.617188 11.917969 1.761719 L 11.917969 4.875 C 11.917969 5.019531 11.859375 5.15625 11.757812 5.257812 C 11.65625 5.359375 11.519531 5.417969 11.375 5.417969 L 8.53125 5.417969 C 8.386719 5.417969 8.25 5.359375 8.148438 5.257812 C 8.046875 5.15625 7.988281 5.019531 7.988281 4.875 C 7.988281 4.730469 8.046875 4.59375 8.148438 4.492188 C 8.25 4.390625 8.386719 4.332031 8.53125 4.332031 L 10.367188 4.332031 C 9.832031 3.695312 9.167969 3.1875 8.371094 2.941406 C 7.289062 2.601562 6.125 2.632812 5.0625 3.027344 C 3.992188 3.425781 3 4.238281 2.507812 5.136719 C 2.472656 5.199219 2.425781 5.253906 2.371094 5.300781 C 2.316406 5.34375 2.25 5.375 2.183594 5.398438 C 2.113281 5.417969 2.042969 5.421875 1.972656 5.414062 C 1.902344 5.40625 1.832031 5.386719 1.769531 5.351562 C 1.707031 5.316406 1.652344 5.273438 1.609375 5.214844 C 1.5625 5.160156 1.53125 5.097656 1.511719 5.027344 C 1.472656 4.890625 1.488281 4.742188 1.554688 4.617188 C 2.191406 3.457031 3.40625 2.488281 4.6875 2.011719 C 5.972656 1.535156 7.382812 1.496094 8.691406 1.90625 C 9.546875 2.171875 10.253906 2.652344 10.832031 3.238281 L 10.832031 1.761719 C 10.832031 1.617188 10.890625 1.480469 10.992188 1.378906 C 11.09375 1.277344 11.230469 1.21875 11.375 1.21875 Z M 4.925781 5.992188 C 5.03125 6.03125 5.121094 6.097656 5.183594 6.191406 C 5.246094 6.28125 5.28125 6.390625 5.28125 6.5 L 5.28125 10.832031 C 5.28125 10.976562 5.222656 11.113281 5.121094 11.214844 C 5.019531 11.316406 4.882812 11.375 4.738281 11.375 C 4.597656 11.375 4.457031 11.316406 4.355469 11.214844 C 4.253906 11.113281 4.199219 10.976562 4.199219 10.832031 L 4.199219 7.851562 C 4.011719 8.003906 3.789062 8.160156 3.527344 8.320312 C 3.46875 8.355469 3.398438 8.378906 3.328125 8.390625 C 3.257812 8.398438 3.1875 8.398438 3.117188 8.378906 C 3.050781 8.363281 2.984375 8.332031 2.925781 8.289062 C 2.871094 8.246094 2.820312 8.195312 2.785156 8.132812 C 2.75 8.070312 2.726562 8.003906 2.714844 7.933594 C 2.703125 7.863281 2.707031 7.792969 2.722656 7.722656 C 2.742188 7.652344 2.773438 7.589844 2.816406 7.53125 C 2.855469 7.472656 2.910156 7.425781 2.972656 7.390625 C 3.621094 7 3.925781 6.632812 4.207031 6.292969 C 4.246094 6.246094 4.285156 6.195312 4.328125 6.148438 C 4.398438 6.066406 4.496094 6.003906 4.601562 5.976562 C 4.710938 5.949219 4.824219 5.953125 4.925781 5.992188 Z M 7.171875 6.859375 C 7.503906 6.300781 8.050781 5.957031 8.800781 5.957031 C 9.554688 5.957031 10.101562 6.300781 10.429688 6.859375 C 10.738281 7.371094 10.832031 8.027344 10.832031 8.667969 C 10.832031 9.304688 10.738281 9.960938 10.429688 10.476562 C 10.101562 11.03125 9.554688 11.375 8.800781 11.375 C 8.050781 11.375 7.503906 11.03125 7.171875 10.476562 C 6.867188 9.960938 6.769531 9.304688 6.769531 8.667969 C 6.769531 8.027344 6.867188 7.371094 7.171875 6.859375 Z M 8.105469 7.410156 C 7.945312 7.679688 7.855469 8.109375 7.855469 8.667969 C 7.855469 9.226562 7.945312 9.652344 8.105469 9.921875 C 8.238281 10.152344 8.4375 10.292969 8.800781 10.292969 C 9.167969 10.292969 9.363281 10.152344 9.5 9.921875 C 9.660156 9.652344 9.75 9.226562 9.75 8.667969 C 9.75 8.109375 9.660156 7.679688 9.5 7.410156 C 9.363281 7.183594 9.167969 7.042969 8.800781 7.042969 C 8.4375 7.042969 8.242188 7.183594 8.105469 7.410156 Z M 8.105469 7.410156 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group control-group-next">\n<button data-action="next" title="Next video">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 1.625 2.574219 C 1.625 1.8125 2.480469 1.359375 3.109375 1.792969 L 8.796875 5.6875 C 8.921875 5.777344 9.027344 5.890625 9.097656 6.027344 C 9.167969 6.164062 9.207031 6.3125 9.207031 6.46875 C 9.207031 6.621094 9.171875 6.773438 9.101562 6.910156 C 9.03125 7.042969 8.925781 7.160156 8.800781 7.25 L 3.113281 11.203125 C 2.484375 11.640625 1.625 11.191406 1.625 10.425781 Z M 11.375 2.03125 C 11.375 1.921875 11.332031 1.820312 11.257812 1.742188 C 11.179688 1.667969 11.078125 1.625 10.96875 1.625 C 10.859375 1.625 10.757812 1.667969 10.679688 1.742188 C 10.605469 1.820312 10.5625 1.921875 10.5625 2.03125 L 10.5625 10.96875 C 10.5625 11.078125 10.605469 11.179688 10.679688 11.257812 C 10.757812 11.332031 10.859375 11.375 10.96875 11.375 C 11.078125 11.375 11.179688 11.332031 11.257812 11.257812 C 11.332031 11.179688 11.375 11.078125 11.375 10.96875 Z M 11.375 2.03125 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group">\n<button data-action="mute" title="Mute / Unmute" class="pip-unmuted">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 8.125 2.300781 L 8.125 10.695312 C 8.125 11.28125 7.433594 11.589844 7 11.203125 L 4.566406 9.039062 C 4.492188 8.972656 4.394531 8.9375 4.296875 8.9375 L 2.300781 8.9375 C 2.140625 8.9375 1.984375 8.90625 1.835938 8.84375 C 1.6875 8.78125 1.554688 8.691406 1.441406 8.578125 C 1.328125 8.464844 1.238281 8.332031 1.175781 8.183594 C 1.113281 8.035156 1.082031 7.878906 1.082031 7.71875 L 1.082031 5.28125 C 1.082031 4.957031 1.210938 4.648438 1.441406 4.417969 C 1.667969 4.191406 1.980469 4.0625 2.300781 4.0625 L 4.296875 4.0625 C 4.394531 4.0625 4.492188 4.027344 4.566406 3.960938 L 6.996094 1.796875 C 7.433594 1.410156 8.125 1.71875 8.125 2.300781 Z M 10.289062 3.195312 C 10.375 3.128906 10.480469 3.101562 10.589844 3.121094 C 10.695312 3.136719 10.792969 3.191406 10.855469 3.277344 C 11.546875 4.210938 11.917969 5.339844 11.917969 6.5 C 11.917969 7.660156 11.546875 8.789062 10.855469 9.722656 C 10.789062 9.804688 10.695312 9.863281 10.589844 9.875 C 10.484375 9.890625 10.375 9.863281 10.289062 9.800781 C 10.203125 9.738281 10.148438 9.644531 10.132812 9.539062 C 10.113281 9.433594 10.140625 9.324219 10.203125 9.238281 C 10.789062 8.445312 11.105469 7.484375 11.105469 6.5 C 11.105469 5.515625 10.789062 4.554688 10.203125 3.761719 C 10.171875 3.71875 10.148438 3.671875 10.132812 3.621094 C 10.121094 3.566406 10.117188 3.515625 10.125 3.460938 C 10.132812 3.40625 10.152344 3.355469 10.179688 3.3125 C 10.207031 3.265625 10.246094 3.226562 10.289062 3.195312 Z M 9.285156 4.535156 C 9.332031 4.507812 9.382812 4.492188 9.4375 4.488281 C 9.492188 4.480469 9.542969 4.484375 9.59375 4.5 C 9.644531 4.515625 9.695312 4.542969 9.734375 4.574219 C 9.777344 4.609375 9.8125 4.652344 9.835938 4.699219 C 10.128906 5.234375 10.292969 5.847656 10.292969 6.5 C 10.292969 7.128906 10.136719 7.75 9.835938 8.304688 C 9.8125 8.351562 9.777344 8.390625 9.734375 8.425781 C 9.695312 8.457031 9.644531 8.484375 9.59375 8.5 C 9.542969 8.515625 9.492188 8.519531 9.4375 8.515625 C 9.382812 8.507812 9.332031 8.492188 9.285156 8.46875 C 9.238281 8.441406 9.199219 8.40625 9.164062 8.367188 C 9.128906 8.324219 9.105469 8.277344 9.089844 8.226562 C 9.074219 8.175781 9.070312 8.121094 9.074219 8.066406 C 9.082031 8.015625 9.097656 7.964844 9.121094 7.917969 C 9.355469 7.480469 9.480469 6.996094 9.480469 6.5 C 9.480469 5.988281 9.347656 5.503906 9.121094 5.085938 C 9.070312 4.988281 9.058594 4.878906 9.089844 4.773438 C 9.121094 4.671875 9.191406 4.585938 9.285156 4.535156 Z M 9.285156 4.535156 " />\n</g>\n</svg>\n</button>\n<input id="pipVolume" type="range" min="0" max="100" />\n</div>\n<div class="control-group align-right">\n<button data-action="crop" title="Remove borders">\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"\nwidth="10px" height="10px" viewBox="0 0 13 13" version="1.1">\n<g id="surface1">\n<path\nstyle=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;"\nd="M 4.527344 9.203125 C 4.324219 9.183594 4.136719 9.089844 4.003906 8.941406 C 3.867188 8.792969 3.792969 8.597656 3.792969 8.394531 L 3.792969 1.625 L 3.789062 1.5625 C 3.773438 1.425781 3.703125 1.300781 3.597656 1.210938 C 3.492188 1.121094 3.355469 1.078125 3.21875 1.085938 C 3.082031 1.09375 2.949219 1.152344 2.855469 1.253906 C 2.761719 1.355469 2.707031 1.488281 2.707031 1.625 L 2.707031 2.707031 L 1.625 2.707031 L 1.5625 2.710938 C 1.425781 2.726562 1.300781 2.796875 1.210938 2.902344 C 1.121094 3.007812 1.078125 3.144531 1.085938 3.28125 C 1.09375 3.417969 1.152344 3.550781 1.253906 3.644531 C 1.355469 3.738281 1.488281 3.792969 1.625 3.792969 L 2.707031 3.792969 L 2.707031 8.394531 L 2.710938 8.5 C 2.738281 8.984375 2.949219 9.441406 3.300781 9.773438 C 3.652344 10.105469 4.121094 10.292969 4.605469 10.292969 L 7.136719 10.292969 L 7.066406 10.269531 L 7.058594 10.265625 C 6.851562 10.191406 6.679688 10.039062 6.585938 9.84375 C 6.488281 9.644531 6.472656 9.417969 6.542969 9.207031 L 4.605469 9.207031 Z M 10.292969 7.175781 L 10.253906 7.0625 L 10.253906 7.058594 C 10.179688 6.851562 10.03125 6.683594 9.835938 6.585938 C 9.640625 6.488281 9.414062 6.472656 9.207031 6.539062 L 9.207031 4.605469 C 9.207031 4.402344 9.132812 4.207031 8.996094 4.058594 C 8.863281 3.910156 8.675781 3.816406 8.472656 3.796875 L 8.394531 3.792969 L 4.332031 3.792969 L 4.332031 2.707031 L 8.394531 2.707031 C 8.878906 2.707031 9.347656 2.894531 9.699219 3.226562 C 10.050781 3.5625 10.261719 4.015625 10.289062 4.5 L 10.292969 4.605469 Z M 12.574219 6.808594 L 12.90625 6.917969 L 12.914062 6.917969 C 12.9375 6.929688 12.960938 6.945312 12.976562 6.96875 C 12.992188 6.988281 13 7.015625 13 7.042969 C 13 7.070312 12.992188 7.097656 12.976562 7.117188 C 12.960938 7.140625 12.9375 7.15625 12.914062 7.167969 L 12.582031 7.273438 C 12.480469 7.308594 12.386719 7.363281 12.3125 7.4375 C 12.238281 7.515625 12.179688 7.605469 12.148438 7.707031 L 12.039062 8.039062 C 12.035156 8.058594 12.023438 8.074219 12.007812 8.089844 C 11.992188 8.101562 11.976562 8.113281 11.957031 8.121094 C 11.9375 8.125 11.917969 8.128906 11.894531 8.125 C 11.875 8.121094 11.855469 8.113281 11.839844 8.101562 C 11.820312 8.085938 11.800781 8.0625 11.792969 8.039062 L 11.683594 7.707031 C 11.652344 7.605469 11.59375 7.511719 11.519531 7.4375 C 11.445312 7.363281 11.351562 7.304688 11.253906 7.273438 L 10.921875 7.164062 C 10.894531 7.15625 10.871094 7.136719 10.855469 7.117188 C 10.839844 7.09375 10.832031 7.066406 10.832031 7.039062 C 10.832031 7.011719 10.839844 6.988281 10.855469 6.964844 C 10.871094 6.941406 10.894531 6.925781 10.921875 6.917969 L 11.253906 6.808594 C 11.351562 6.777344 11.441406 6.71875 11.515625 6.644531 C 11.589844 6.570312 11.644531 6.476562 11.679688 6.378906 L 11.785156 6.046875 C 11.796875 6.019531 11.8125 5.996094 11.835938 5.980469 C 11.855469 5.964844 11.882812 5.957031 11.910156 5.957031 C 11.9375 5.957031 11.964844 5.964844 11.984375 5.980469 C 12.007812 5.996094 12.023438 6.019531 12.035156 6.046875 L 12.140625 6.378906 C 12.175781 6.476562 12.230469 6.570312 12.304688 6.644531 C 12.382812 6.71875 12.472656 6.777344 12.574219 6.808594 Z M 8.714844 10.515625 C 8.527344 10.273438 8.273438 10.09375 7.984375 9.996094 L 7.238281 9.753906 C 7.179688 9.734375 7.132812 9.695312 7.097656 9.648438 C 7.0625 9.597656 7.042969 9.539062 7.042969 9.476562 C 7.042969 9.417969 7.0625 9.355469 7.097656 9.308594 C 7.132812 9.257812 7.179688 9.21875 7.238281 9.199219 L 7.984375 8.957031 C 8.207031 8.878906 8.40625 8.753906 8.570312 8.589844 C 8.734375 8.425781 8.863281 8.222656 8.9375 8.003906 L 8.945312 7.984375 L 9.1875 7.238281 C 9.207031 7.179688 9.242188 7.128906 9.292969 7.09375 C 9.34375 7.058594 9.402344 7.039062 9.464844 7.039062 C 9.523438 7.039062 9.585938 7.058594 9.636719 7.09375 C 9.683594 7.128906 9.722656 7.179688 9.742188 7.238281 L 9.984375 7.984375 C 10.058594 8.210938 10.1875 8.417969 10.355469 8.585938 C 10.527344 8.753906 10.730469 8.882812 10.960938 8.957031 L 11.703125 9.199219 L 11.71875 9.203125 C 11.777344 9.222656 11.828125 9.261719 11.863281 9.3125 C 11.898438 9.359375 11.914062 9.421875 11.914062 9.480469 C 11.914062 9.542969 11.898438 9.601562 11.863281 9.652344 C 11.828125 9.699219 11.777344 9.738281 11.71875 9.757812 L 10.972656 10 C 10.746094 10.078125 10.539062 10.203125 10.371094 10.371094 C 10.203125 10.542969 10.074219 10.746094 10 10.972656 L 9.757812 11.71875 L 9.75 11.738281 C 9.726562 11.792969 9.6875 11.839844 9.636719 11.871094 C 9.585938 11.902344 9.527344 11.917969 9.46875 11.917969 C 9.410156 11.914062 9.351562 11.894531 9.304688 11.859375 C 9.257812 11.824219 9.222656 11.777344 9.203125 11.71875 L 8.957031 10.972656 C 8.90625 10.808594 8.820312 10.652344 8.714844 10.515625 " />\n</g>\n</svg>\n</button>\n</div>\n<div class="control-group control-group-time">\n<div class="control-time"></div>\n</div>\n</div>\n</div>',
           ),
           e.append(modal),
           n.document
@@ -213,8 +293,13 @@ var brightnessTriggerCount = 1;
           n.document
             .querySelector('button[data-action="brightness"]')
             .addEventListener("click", () => {
-                //alert("Alert here");
+              //alert("Alert here");
               brightnessTrigger(n);
+            }),
+          n.document
+            .querySelector('button[data-action="autodark"]')
+            .addEventListener("click", () => {
+              toggleAutodark(n);
             }),
           n.document
             .querySelector('button[data-action="rewind"]')
@@ -278,11 +363,11 @@ var brightnessTriggerCount = 1;
             .querySelector("#pipVolume")
             .addEventListener("input", (e) => {
               let t = parseInt(e.target.value);
-              !(function (n, e) {
+              (!(function (n, e) {
                 const t = c(n);
                 t && (t.volume = e);
               })(n, t / 100),
-                C(e.target);
+                C(e.target));
             }),
           n.document
             .querySelector("#pipProgress")
@@ -297,14 +382,14 @@ var brightnessTriggerCount = 1;
                         var e,
                           t,
                           o = Math.floor(1e3 * parseFloat(n));
-                        ((e =
+                        (((e =
                           window.netflix.appContext.state.playerApp.getAPI()
                             .videoPlayer),
                         (t = e.getAllPlayerSessionIds()[0]),
                         e.getVideoPlayerBySessionId(t)).seek(o),
                           setTimeout(() => {
                             document.documentElement.removeAttribute("seeking");
-                          }, 500);
+                          }, 500));
                       })(Math.floor(t.duration * e + 0.5));
                   })(n, t)
                 : (function (n, e) {
@@ -325,16 +410,16 @@ var brightnessTriggerCount = 1;
       function f(n) {
         try {
           let e = new Date(1e3 * n).toISOString().substr(11, 8);
-          return (e = e.replace(/^00:/, "").replace(/^0/, "")), e;
+          return ((e = e.replace(/^00:/, "").replace(/^0/, "")), e);
         } catch (n) {
           return "";
         }
       }
       function v(n) {
         let e = n.target.querySelector("video");
-        a && (a.append(e), (a = null)), t.exitPiPHandler(n), w();
+        (a && (a.append(e), (a = null)), t.exitPiPHandler(n), w());
       }
-      (escapeHTMLPolicy = trustedTypes.createPolicy("forceInner", {
+      ((escapeHTMLPolicy = trustedTypes.createPolicy("forceInner", {
         createHTML: (n) => n,
       })),
         (async function () {
@@ -352,25 +437,25 @@ var brightnessTriggerCount = 1;
               if (0 !== n.length) return n[0];
             })();
             if (!i) return;
-            (a = i.parentElement),
+            ((a = i.parentElement),
               await documentPictureInPicture
                 .requestWindow({ width: 400, height: 225 })
                 .then((n) => {
-                  (r = i.videoWidth), (o = i.videoHeight);
+                  ((r = i.videoWidth), (o = i.videoHeight));
                   let e = n.document.createElement("div");
-                  e.classList.add("video-wrapper"),
+                  (e.classList.add("video-wrapper"),
                     n.document.body.append(e),
                     e.append(i),
                     m(n, e, i),
                     (function (n, e) {
-                      w(),
+                      (w(),
                         (l = setInterval(() => {
                           !(function (n, e) {
                             document.documentElement.hasAttribute("seeking") ||
                               (function (n, e) {
                                 let t = (function (n) {
                                   return n.document.body.querySelector(
-                                    '#pipController button[data-action="play"]'
+                                    '#pipController button[data-action="play"]',
                                   );
                                 })(n);
                                 t &&
@@ -380,18 +465,51 @@ var brightnessTriggerCount = 1;
                                       t.classList.add("pip-pause"),
                                       s(
                                         t,
-                                        '\n    <svg width="13" height="13" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">\n    <path fill="#000" d="M120.16 45A20.162 20.162 0 0 0 100 65.16v381.68A20.162 20.162 0 0 0 120.16 467h65.68A20.162 20.162 0 0 0 206 446.84V65.16A20.162 20.162 0 0 0 185.84 45h-65.68zm206 0A20.162 20.162 0 0 0 306 65.16v381.68A20.162 20.162 0 0 0 326.16 467h65.68A20.162 20.162 0 0 0 412 446.84V65.16A20.162 20.162 0 0 0 391.84 45h-65.68z"/>\n    </svg>\n'
+                                        '\n    <svg width="10" height="10" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">\n    <path fill="#000" d="M120.16 45A20.162 20.162 0 0 0 100 65.16v381.68A20.162 20.162 0 0 0 120.16 467h65.68A20.162 20.162 0 0 0 206 446.84V65.16A20.162 20.162 0 0 0 185.84 45h-65.68zm206 0A20.162 20.162 0 0 0 306 65.16v381.68A20.162 20.162 0 0 0 326.16 467h65.68A20.162 20.162 0 0 0 412 446.84V65.16A20.162 20.162 0 0 0 391.84 45h-65.68z"/>\n    </svg>\n',
                                       ))
                                     : t.classList.contains("pip-pause") &&
                                       (t.classList.add("pip-play"),
                                       t.classList.remove("pip-pause"),
                                       s(
                                         t,
-                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13px" height="13px" viewBox="0 0 13 13" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 2.707031 2.855469 C 2.707031 1.933594 3.699219 1.34375 4.507812 1.785156 L 11.207031 5.429688 C 12.054688 5.890625 12.054688 7.109375 11.207031 7.570312 L 4.507812 11.214844 C 3.699219 11.65625 2.707031 11.066406 2.707031 10.144531 Z M 2.707031 2.855469 "/></g></svg>\n'
+                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10px" height="10px" viewBox="0 0 13 13" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 2.707031 2.855469 C 2.707031 1.933594 3.699219 1.34375 4.507812 1.785156 L 11.207031 5.429688 C 12.054688 5.890625 12.054688 7.109375 11.207031 7.570312 L 4.507812 11.214844 C 3.699219 11.65625 2.707031 11.066406 2.707031 10.144531 Z M 2.707031 2.855469 "/></g></svg>\n',
+                                      )));
+                                let autodarken = (function (n) {
+                                  return n.document.body.querySelector(
+                                    '#pipController button[data-action="autodark"]',
+                                  );
+                                })(n);
+                                autodarken &&
+                                  (autodark
+                                    ? autodarken.classList.contains(
+                                        "pip-autodark-off",
+                                      ) &&
+                                      (autodarken.classList.remove(
+                                        "pip-autodark-off",
+                                      ),
+                                      autodarken.classList.add(
+                                        "pip-autodark-on",
+                                      ),
+                                      s(
+                                        autodarken,
+                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off-icon lucide-eye-off"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>\n',
+                                      ))
+                                    : autodarken.classList.contains(
+                                        "pip-autodark-on",
+                                      ) &&
+                                      (autodarken.classList.add(
+                                        "pip-autodark-off",
+                                      ),
+                                      autodarken.classList.remove(
+                                        "pip-autodark-on",
+                                      ),
+                                      s(
+                                        autodarken,
+                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>\n',
                                       )));
                                 let o = (function (n) {
                                   return n.document.body.querySelector(
-                                    '#pipController button[data-action="mute"]'
+                                    '#pipController button[data-action="mute"]',
                                   );
                                 })(n);
                                 o &&
@@ -401,28 +519,28 @@ var brightnessTriggerCount = 1;
                                       o.classList.remove("pip-unmuted"),
                                       s(
                                         o,
-                                        '\n    <svg width="13" height="13" fill="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\n        <path d="M16 7v10M4 17h2.697L14 21.868V2.132L6.697 7H4c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2z"/>\n    </svg>\n'
+                                        '\n    <svg width="10" height="10" fill="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\n        <path d="M16 7v10M4 17h2.697L14 21.868V2.132L6.697 7H4c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2z"/>\n    </svg>\n',
                                       ))
                                     : o.classList.contains("pip-muted") &&
                                       (o.classList.add("pip-unmuted"),
                                       o.classList.remove("pip-muted"),
                                       s(
                                         o,
-                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13px" height="13px" viewBox="0 0 13 13" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 8.125 2.300781 L 8.125 10.695312 C 8.125 11.28125 7.433594 11.589844 7 11.203125 L 4.566406 9.039062 C 4.492188 8.972656 4.394531 8.9375 4.296875 8.9375 L 2.300781 8.9375 C 2.140625 8.9375 1.984375 8.90625 1.835938 8.84375 C 1.6875 8.78125 1.554688 8.691406 1.441406 8.578125 C 1.328125 8.464844 1.238281 8.332031 1.175781 8.183594 C 1.113281 8.035156 1.082031 7.878906 1.082031 7.71875 L 1.082031 5.28125 C 1.082031 4.957031 1.210938 4.648438 1.441406 4.417969 C 1.667969 4.191406 1.980469 4.0625 2.300781 4.0625 L 4.296875 4.0625 C 4.394531 4.0625 4.492188 4.027344 4.566406 3.960938 L 6.996094 1.796875 C 7.433594 1.410156 8.125 1.71875 8.125 2.300781 Z M 10.289062 3.195312 C 10.375 3.128906 10.480469 3.101562 10.589844 3.121094 C 10.695312 3.136719 10.792969 3.191406 10.855469 3.277344 C 11.546875 4.210938 11.917969 5.339844 11.917969 6.5 C 11.917969 7.660156 11.546875 8.789062 10.855469 9.722656 C 10.789062 9.804688 10.695312 9.863281 10.589844 9.875 C 10.484375 9.890625 10.375 9.863281 10.289062 9.800781 C 10.203125 9.738281 10.148438 9.644531 10.132812 9.539062 C 10.113281 9.433594 10.140625 9.324219 10.203125 9.238281 C 10.789062 8.445312 11.105469 7.484375 11.105469 6.5 C 11.105469 5.515625 10.789062 4.554688 10.203125 3.761719 C 10.171875 3.71875 10.148438 3.671875 10.132812 3.621094 C 10.121094 3.566406 10.117188 3.515625 10.125 3.460938 C 10.132812 3.40625 10.152344 3.355469 10.179688 3.3125 C 10.207031 3.265625 10.246094 3.226562 10.289062 3.195312 Z M 9.285156 4.535156 C 9.332031 4.507812 9.382812 4.492188 9.4375 4.488281 C 9.492188 4.480469 9.542969 4.484375 9.59375 4.5 C 9.644531 4.515625 9.695312 4.542969 9.734375 4.574219 C 9.777344 4.609375 9.8125 4.652344 9.835938 4.699219 C 10.128906 5.234375 10.292969 5.847656 10.292969 6.5 C 10.292969 7.128906 10.136719 7.75 9.835938 8.304688 C 9.8125 8.351562 9.777344 8.390625 9.734375 8.425781 C 9.695312 8.457031 9.644531 8.484375 9.59375 8.5 C 9.542969 8.515625 9.492188 8.519531 9.4375 8.515625 C 9.382812 8.507812 9.332031 8.492188 9.285156 8.46875 C 9.238281 8.441406 9.199219 8.40625 9.164062 8.367188 C 9.128906 8.324219 9.105469 8.277344 9.089844 8.226562 C 9.074219 8.175781 9.070312 8.121094 9.074219 8.066406 C 9.082031 8.015625 9.097656 7.964844 9.121094 7.917969 C 9.355469 7.480469 9.480469 6.996094 9.480469 6.5 C 9.480469 5.988281 9.347656 5.503906 9.121094 5.085938 C 9.070312 4.988281 9.058594 4.878906 9.089844 4.773438 C 9.121094 4.671875 9.191406 4.585938 9.285156 4.535156 Z M 9.285156 4.535156 "/></g></svg>\n'
+                                        '\n    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10px" height="10px" viewBox="0 0 13 13" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 8.125 2.300781 L 8.125 10.695312 C 8.125 11.28125 7.433594 11.589844 7 11.203125 L 4.566406 9.039062 C 4.492188 8.972656 4.394531 8.9375 4.296875 8.9375 L 2.300781 8.9375 C 2.140625 8.9375 1.984375 8.90625 1.835938 8.84375 C 1.6875 8.78125 1.554688 8.691406 1.441406 8.578125 C 1.328125 8.464844 1.238281 8.332031 1.175781 8.183594 C 1.113281 8.035156 1.082031 7.878906 1.082031 7.71875 L 1.082031 5.28125 C 1.082031 4.957031 1.210938 4.648438 1.441406 4.417969 C 1.667969 4.191406 1.980469 4.0625 2.300781 4.0625 L 4.296875 4.0625 C 4.394531 4.0625 4.492188 4.027344 4.566406 3.960938 L 6.996094 1.796875 C 7.433594 1.410156 8.125 1.71875 8.125 2.300781 Z M 10.289062 3.195312 C 10.375 3.128906 10.480469 3.101562 10.589844 3.121094 C 10.695312 3.136719 10.792969 3.191406 10.855469 3.277344 C 11.546875 4.210938 11.917969 5.339844 11.917969 6.5 C 11.917969 7.660156 11.546875 8.789062 10.855469 9.722656 C 10.789062 9.804688 10.695312 9.863281 10.589844 9.875 C 10.484375 9.890625 10.375 9.863281 10.289062 9.800781 C 10.203125 9.738281 10.148438 9.644531 10.132812 9.539062 C 10.113281 9.433594 10.140625 9.324219 10.203125 9.238281 C 10.789062 8.445312 11.105469 7.484375 11.105469 6.5 C 11.105469 5.515625 10.789062 4.554688 10.203125 3.761719 C 10.171875 3.71875 10.148438 3.671875 10.132812 3.621094 C 10.121094 3.566406 10.117188 3.515625 10.125 3.460938 C 10.132812 3.40625 10.152344 3.355469 10.179688 3.3125 C 10.207031 3.265625 10.246094 3.226562 10.289062 3.195312 Z M 9.285156 4.535156 C 9.332031 4.507812 9.382812 4.492188 9.4375 4.488281 C 9.492188 4.480469 9.542969 4.484375 9.59375 4.5 C 9.644531 4.515625 9.695312 4.542969 9.734375 4.574219 C 9.777344 4.609375 9.8125 4.652344 9.835938 4.699219 C 10.128906 5.234375 10.292969 5.847656 10.292969 6.5 C 10.292969 7.128906 10.136719 7.75 9.835938 8.304688 C 9.8125 8.351562 9.777344 8.390625 9.734375 8.425781 C 9.695312 8.457031 9.644531 8.484375 9.59375 8.5 C 9.542969 8.515625 9.492188 8.519531 9.4375 8.515625 C 9.382812 8.507812 9.332031 8.492188 9.285156 8.46875 C 9.238281 8.441406 9.199219 8.40625 9.164062 8.367188 C 9.128906 8.324219 9.105469 8.277344 9.089844 8.226562 C 9.074219 8.175781 9.070312 8.121094 9.074219 8.066406 C 9.082031 8.015625 9.097656 7.964844 9.121094 7.917969 C 9.355469 7.480469 9.480469 6.996094 9.480469 6.5 C 9.480469 5.988281 9.347656 5.503906 9.121094 5.085938 C 9.070312 4.988281 9.058594 4.878906 9.089844 4.773438 C 9.121094 4.671875 9.191406 4.585938 9.285156 4.535156 Z M 9.285156 4.535156 "/></g></svg>\n',
                                       )));
                                 let i = (function (n) {
                                   return n.document.body.querySelector(
-                                    "#pipProgress"
+                                    "#pipProgress",
                                   );
                                 })(n);
                                 if (i) {
                                   let n = e.currentTime / e.duration,
                                     t = Math.floor(1e3 * n + 0.5) / 10;
-                                  (i.value = t), C(i);
+                                  ((i.value = t), C(i));
                                 }
                                 let r = (function (n) {
                                   return n.document.body.querySelector(
-                                    "#pipController .control-time"
+                                    "#pipController .control-time",
                                   );
                                 })(n);
                                 if (r) {
@@ -435,26 +553,28 @@ var brightnessTriggerCount = 1;
                                 }
                                 let l = (function (n) {
                                   return n.document.body.querySelector(
-                                    "#pipVolume"
+                                    "#pipVolume",
                                   );
                                 })(n);
                                 l && C(l);
                               })(n, {
                                 playbackRate: e.playbackRate,
                                 playing: h(e),
+
                                 muted: e.muted,
                                 currentTime: e.currentTime,
                                 duration: g(e),
                               });
                           })(n, e);
-                        }, 200));
-                    })(n, i);
+                        }, 200)));
+                    })(n, i));
+
                   const a = document.createElement("style");
                   a.textContent =
-                    '\n    body {\n        margin: 0;background-color: #000000 !important;\n    }\n\n    .video-wrapper {\n        display: flex;\n        height: 100%;\n    }\n\n    .video-wrapper video {\n        width: 100% !important;\n        height: auto !important;\n    }\n\n    .video-wrapper video.almost-perfect {\n        object-fit: fill;\n    }\n\n    #pipController {\n        position: fixed;\n        opacity: 0;\n        background: transparent;\n        color: white;\n        border-radius: 4px;\n        padding: 3px 5px 0;\n        margin: 0;\n        z-index: 9999999;\n        box-sizing: border-box;\n        bottom: 0;\n        left: 0;\n        width: 100%;\n        transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);\n    }\n\n    body:hover #pipController {\n        opacity: 1;\n    }\n\n    #pipController .controls {\n        display: flex;\n        line-height: 1.8em;\n        font-family: sans-serif;\n        font-size: 13px;\n        user-select: none;\n        align-items: center;\n        gap: 8px;\n        flex-direction: column;\n        margin: 8px 2px 4px;\n    }\n\n    #pipController .controls .control-time {\n        font-size: 11px;\n    }\n\n    #pipController .controls .control-group-time.hidden {\n        display: none !important;\n    }\n\n    #pipController .subtitles {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        height: 30px;\n        line-height: 15px;\n        user-select: none;\n        text-align: center;\n        width: 100%;\n        overflow: visible !important;\n        text-overflow: ellipsis;\n        white-space: normal;\n        font-size: 13px;\n        font-family: Roboto, "Arial Unicode Ms", Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif;\n        color: #eee;\n    }\n\n    #pipController .subtitles.hidden {\n        display: none;\n    }\n\n    #pipController .controls button {\n        display: flex;\n        border: none;\n        background: FFF;\n        cursor: pointer;\n        color: #fff;\n        font-weight: normal;\n        padding: 5px;\n        border-radius: 13px;\n        margin: 0;\n        font-size: 16px;\n        font-family: "Lucida Console", Monaco, monospace;\n        transition: color 0.2s;\n        align-items: center;\n        height: unset;\n    }\n\n    #pipController .controls button:hover {\n        background-color: lightgray;\n    }\n\n    #pipController .controls .control-row {\n        display: flex;\n        flex-direction: row;\n        width: 100%;\n        align-items: center;\n        gap: calc(1.8%);\n        margin: 0 3px;\n    }\n\n    #pipController .controls .control-row.second-row {\n        margin: 0 2px 0 -2px;\n    }\n\n    #pipController .controls .control-row .control-group {\n        display: flex;\n        flex-direction: row;\n        margin: 0;\n        gap: 0;\n        align-items: center;\n    }\n\n    #pipController .controls .control-row .control-group.align-right {\n        margin-left: auto;\n    }\n\n    #pipController .draggable {\n        display: flex;\n        margin: 0;\n        font-family: arial, sans-serif;\n        user-select: none;\n    }\n\n    #pipController .draggable svg {\n        height: 16px;\n        width: 16px;\n    }\n\n    #pipController button:hover {\n        color: #fff;\n    }\n\n    #pipController button:active {\n        color: #fff;\n        font-weight: bold;\n    }\n\n    #pipVolume, #pipProgress {\n        height: 7px;\n        outline: none;\n        border: none;\n        margin: 0;\n        width: 100%;\n    }\n\n    #pipVolume {\n        width: 44px !important; margin-left: 10px !important;\n    }\n\n    #pipProgress {\n        flex-grow: 1\n    }\n\n    #pipController input {\n        cursor: pointer;\n        appearance: none;\n        outline: none;\n        background: linear-gradient( to right, #5f39a3 var(--litters-range), rgba(127, 127, 127, 0.86) var(--litters-range));\n    }\n\n    #pipController input.disabled {\n        cursor: default;\n        pointer-events: none;\n    }\n\n    #pipController input::-webkit-slider-thumb {\n        cursor: pointer;\n        appearance: none;\n        width: 15px;\n        height: 15px;\n        background: #eee;\n        border-radius: 50%;\n    }\n';
+                    '\n    body {\n        margin: 0;background-color: #000000 !important;\n    }\n\n    .video-wrapper {\n        display: flex;\n        height: 100%;\n    }\n\n    .video-wrapper video {\n        width: 100% !important;\n        height: auto !important;\n    }\n\n    .video-wrapper video.almost-perfect {\n        object-fit: fill;\n    }\n\n    #pipController {\n        position: fixed;\n        opacity: 0;\n        background: transparent;\n        color: white;\n        border-radius: 4px;\n        padding: 3px 5px 0;\n        margin: 0;\n        z-index: 9999999;\n        box-sizing: border-box;\n        bottom: 0;\n        left: 0;\n        width: 100%;\n        transition: opacity 0.2s cubic-bezier(0, 0, 0.2, 1);\n    }\n\n    body:hover #pipController {\n        opacity: 1;\n    }\n\n    #pipController .controls {\n        display: flex;\n        line-height: 0em;\n        font-family: sans-serif;\n        font-size: 13px;\n        user-select: none;\n        align-items: center;\n        gap: 8px;\n        flex-direction: column;\n        margin: 8px 2px 4px;\n    }\n\n    #pipController .controls .control-time {\n        font-size: 11px;\n    }\n\n    #pipController .controls .control-group-time.hidden {\n        display: none !important;\n    }\n\n    #pipController .subtitles {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        height: 30px;\n        line-height: 15px;\n        user-select: none;\n        text-align: center;\n        width: 100%;\n        overflow: visible !important;\n        text-overflow: ellipsis;\n        white-space: normal;\n        font-size: 13px;\n        font-family: Roboto, "Arial Unicode Ms", Arial, Helvetica, Verdana, "PT Sans Caption", sans-serif;\n        color: #eee;\n    }\n\n    #pipController .subtitles.hidden {\n        display: none;\n    }\n\n    #pipController .controls button {\n        display: flex;\n        border: none;\n        background: FFF;\n        cursor: pointer;\n        color: #fff;\n        font-weight: normal;\n        padding: 3px;\n        border-radius: 13px;\n        margin: 0;\n        font-size: 12px;\n        font-family: "Lucida Console", Monaco, monospace;\n        transition: color 0.2s;\n        align-items: center;\n        height: unset;\n    }\n\n    #pipController .controls button:hover {\n        background-color: lightgray;\n    }\n\n    #pipController .controls .control-row {\n        display: flex;\n        flex-direction: row;\n        width: 100%;\n        align-items: center;\n        gap: calc(1.8%);\n        margin: 0 3px;\n    }\n\n    #pipController .controls .control-row.second-row {\n        margin: 0 2px 0 -2px;\n    }\n\n    #pipController .controls .control-row .control-group {\n        display: flex;\n        flex-direction: row;\n        margin: 0;\n        gap: 0;\n        align-items: center;\n    }\n\n    #pipController .controls .control-row .control-group.align-right {\n        margin-left: auto;\n    }\n\n    #pipController .draggable {\n        display: flex;\n        margin: 0;\n        font-family: arial, sans-serif;\n        user-select: none;\n    }\n\n    #pipController .draggable svg {\n        height: 16px;\n        width: 16px;\n    }\n\n    #pipController button:hover {\n        color: #fff;\n    }\n\n    #pipController button:active {\n        color: #fff;\n        font-weight: bold;\n    }\n\n    #pipVolume, #pipProgress {\n        height: 7px;\n        outline: none;\n        border: none;\n        margin: 0;\n        width: 100%;\n    }\n\n    #pipVolume {\n        width: 44px !important; margin-left: 10px !important;\n    }\n\n    #pipProgress {\n        flex-grow: 1\n    }\n\n    #pipController input {\n        cursor: pointer;\n        appearance: none;\n        outline: none;\n        background: linear-gradient( to right, #5f39a3 var(--litters-range), rgba(127, 127, 127, 0.86) var(--litters-range));\n    }\n\n    #pipController input.disabled {\n        cursor: default;\n        pointer-events: none;\n    }\n\n    #pipController input::-webkit-slider-thumb {\n        cursor: pointer;\n        appearance: none;\n        width: 15px;\n        height: 15px;\n        background: #eee;\n        border-radius: 50%;\n    }\n';
                   let p = t.siteStyles();
-                  p && (a.textContent += "\n" + p),
-                    n.document.title = "Shing PiP Extension",
+                  (p && (a.textContent += "\n" + p),
+                    (n.document.title = "Shing PiP Extension"),
                     n.document.head.appendChild(a),
                     t.enterPiPHandler(n, e),
                     n.addEventListener("pagehide", v),
@@ -471,10 +591,10 @@ var brightnessTriggerCount = 1;
                           })(n),
                           a = n.innerWidth;
                         if (n.innerWidth * o > n.innerHeight * r)
-                          (a = Math.floor((n.innerHeight * r) / o + 0.5)),
+                          ((a = Math.floor((n.innerHeight * r) / o + 0.5)),
                             (l.style = `width: ${a}px; left: calc(50% - ${
                               a / 2
-                            }px);`);
+                            }px);`));
                         else if (n.innerWidth * o < n.innerHeight * r) {
                           let e = Math.floor((n.innerWidth * o) / r + 0.5);
                           l.style = `bottom: calc(50% - ${e / 2}px);`;
@@ -484,7 +604,7 @@ var brightnessTriggerCount = 1;
                           ? s.classList.add("hidden")
                           : s.classList.remove("hidden");
                       })(n);
-                    });
+                    }));
                 })
                 .catch((t) => {
                   !(async function () {
@@ -492,12 +612,19 @@ var brightnessTriggerCount = 1;
                     if (t) {
                       if (t.hasAttribute("__pip__"))
                         return void document.exitPictureInPicture();
-                      await e(t), _gaq.push(["_trackPageview", "/"]);
+                      (await e(t), _gaq.push(["_trackPageview", "/"]));
                     }
                   })();
-                });
+                }));
           }
-        })();
+        })());
     })();
   })();
+  // chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  //   if (msg === "SKIP_YT_AD") {
+  //     console.log("SKIP_YT_AD");
+  //     const result = skipYouTubeAd();
+  //     sendResponse({ skipped: result });
+  //   }
+  // });
 })();
